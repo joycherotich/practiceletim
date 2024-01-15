@@ -1,0 +1,122 @@
+@include('includes.topmenu')
+
+@include('includes.side_nav')
+
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- @if(session("has_total_amount")) -->
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <div class="card gradient-bx text-white bg-color5 rounded">
+                    <div class="card-body">
+                        <div class="media align-items-center">
+                            <div class="media-body">
+                                <p class="mb-1">Total Amount</p>
+                                <div class="center d-flex flex-wrap">
+                                    <h2 class="fs-20 font-w300 text-white mb-0 mr-3" id="total_amount">.</h2>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @endif -->
+
+            <!-- @if(session("has_total_statements")) -->
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                <div class="card gradient-bx text-white bg-color6 rounded">
+                    <div class="card-body">
+                        <div class="media align-items-center">
+                            <div class="media-body">
+                                <p class="mb-1">Total Statements</p>
+                                <div class="center d-flex flex-wrap">
+                                    <h2 class="fs-20 font-w300 text-white mb-0 mr-3" id="total_statements">.</h2>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @endif -->
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        load_total_amount();
+        load_total_statements();
+    });
+
+    function load_total_amount() {
+        $('#master_loader').show();
+
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo url("/load_total_amount_endpoint"); ?>',
+            success: function(data) {
+                if (data.success) {
+                    var totalAmount = to_cash(data.total_amount);
+                    $("#total_amount").html(currency + "" + totalAmount);
+                } else {
+                    // Handle error
+                }
+            },
+            error: function(data) {
+                // Handle error
+            },
+            complete: function(data) {
+                $('#master_loader').hide();
+            }
+        });
+    }
+
+    function load_total_statements() {
+        $('#master_loader').show();
+
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo url("/load_total_statements_endpoint"); ?>',
+            success: function(data) {
+                if (data.success) {
+                    $("#total_statements").html(data.total_statements);
+                } else {
+                    // Handle error
+                }
+            },
+            error: function(data) {
+                // Handle error
+            },
+            complete: function(data) {
+                $('#master_loader').hide();
+            }
+        });
+    }
+</script>
+
+@include('includes.footer')
+disbursement...------
+
+            <!-- <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-share-1"></i>
+                    <span class="nav-text">Disbursements</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ URL::to('/disburse') }}">Disburse</a></li>                    
+                    <li><a href="{{ URL::to('/disbursement_history') }}">Disbursement History</a></li> 
+                </ul>
+            </li>
+            @endif -->
+            <!-- <tr>
+                <td>${customerPayment.msisdn}</td>
+                <td>${customerPayment.amount}</td>
+                <td>${customerPayment.payment_reference}</td>
+                <td>${customerPayment.payment_cycle_name}</td>
+                <td>${customerPayment.status}</td>
+            </tr> -->
